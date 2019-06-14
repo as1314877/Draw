@@ -22,7 +22,6 @@ public class Main2Activity extends AppCompatActivity {
 
     private  PaintView paintView;
     private TextView resultLabel, identifyResult;
-    private ImageView image1, image2, image3;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,9 +32,6 @@ public class Main2Activity extends AppCompatActivity {
         resultLabel = findViewById(R.id.resultLabel);
         identifyResult = findViewById(R.id.identifyResult);
         paintView = (PaintView) findViewById(R.id.paintView);
-        image1 = findViewById(R.id.image1);
-        image2 = findViewById(R.id.image2);
-        image3 = findViewById(R.id.image3);
 
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -45,26 +41,22 @@ public class Main2Activity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //開始做辨識的工作
+                double canvasSize[] = {paintView.getWidth(), paintView.getHeight()};
+                Log.e("畫布", "width = "+canvasSize[0]+"   height="+canvasSize[1]);
                 ArrayList<ArrayList<Float>> graphData = paintView.GetXYTimePoint();
                 for(int i = 0; i < graphData.size(); i++) {
                     ArrayList<Float> temp = graphData.get(i);
                     for(int j = 0; j < temp.size(); j++) {
-                        Log.d("Graph Data", i + "." + j + "  " + temp.get(j).toString());
+                        Log.e("Graph Data", i + "-" + j + "  " + temp.get(j).toString());
                     }
                 }
-                //辨識完，圖片跟結果要顯示
-                image1.setVisibility(View.VISIBLE);
-                image2.setVisibility(View.VISIBLE);
-                image3.setVisibility(View.VISIBLE);
+                //辨識完，結果要顯示
                 resultLabel.setVisibility(View.VISIBLE);
                 identifyResult.setVisibility(View.VISIBLE);
             }
         });
 
         //在辨識之前先不用出現:
-        image1.setVisibility(View.INVISIBLE);
-        image2.setVisibility(View.INVISIBLE);
-        image3.setVisibility(View.INVISIBLE);
         resultLabel.setVisibility(View.INVISIBLE);
         identifyResult.setVisibility(View.INVISIBLE);
     }
@@ -87,21 +79,4 @@ public class Main2Activity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    //當圖片被按下，要把此圖傳回MaubActivity
-    public void getImage(View view) {
-        switch (view.getId()){
-            case R.id.image1:
-                Intent intent = new Intent(Main2Activity.this, MainActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.image2:
-                Snackbar.make(view, "Image 2 selected", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                break;
-            case R.id.image3:
-                Snackbar.make(view, "Image 3 selected", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                break;
-        }
-    }
 }
